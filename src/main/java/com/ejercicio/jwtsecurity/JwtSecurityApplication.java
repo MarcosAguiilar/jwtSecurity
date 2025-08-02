@@ -3,6 +3,7 @@ package com.ejercicio.jwtsecurity;
 import com.ejercicio.jwtsecurity.model.User;
 import com.ejercicio.jwtsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -17,13 +18,16 @@ public class JwtSecurityApplication {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostConstruct
     public void initUsers() {
         List<User> users = Stream.of(
-                new User(101, "dms", "password", "dms@gmail.com"),
-                new User(102, "jorge", "password", "jorge@gmail.com"),
-                new User(103, "pedro", "password", "pedro@gmail.com"),
-                new User(104, "antonio", "password", "antonio@gmail.com")
+                new User(101, "dms", passwordEncoder.encode("password"), "dms@gmail.com"),
+                new User(102, "jorge", passwordEncoder.encode("password"), "jorge@gmail.com"),
+                new User(103, "pedro", passwordEncoder.encode("password"), "pedro@gmail.com"),
+                new User(104, "antonio", passwordEncoder.encode("password"), "antonio@gmail.com")
         ).collect(Collectors.toList());
 
         userRepository.saveAll(users);
